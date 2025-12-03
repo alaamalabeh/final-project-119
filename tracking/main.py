@@ -26,9 +26,9 @@ def main():
     if not api_key:
         print("\n ERROR: GOOGLE_API_KEY environment variable not set")
         print("\nPlease set your API key:")
-        print("  export GOOGLE_API_KEY='your-api-key-here'")
+        print("  export GOOGLE_API_KEY='AIzaSyCv884Awefym3sqd2MiildW62z6xD-maIE'")
         print("\nOr create a .env file with:")
-        print("  GOOGLE_API_KEY=your-api-key-here")
+        print("  GOOGLE_API_KEY=AIzaSyCv884Awefym3sqd2MiildW62z6xD-maIE")
         print("\n Get your free API key at: https://makersuite.google.com/app/apikey")
         sys.exit(1)
 
