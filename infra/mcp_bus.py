@@ -131,7 +131,28 @@ class MCPBus:
 
         print(f"[MCP Bus] {message.sender} -> {message.receiver}: {message.message_type}")
 
-        # Check if receiver exists
+        # Handle tool calls directly (receiver is "MCPBus")
+        if message.message_type == "tool_call":
+            # Execute a tool
+            tool_name = message.payload.get("tool_name")
+            tool_params = message.payload.get("parameters", {})
+
+            if tool_name not in self.tools:
+                raise ValueError(f"Tool '{tool_name}' not registered")
+
+            result = self.tools[tool_name].execute(**tool_params)
+
+            response = MCPMessage(
+                sender = "MCPBus",
+                receiver = message.sender,
+                message_type = "tool_response",
+                payload = {"result": result}
+            )
+
+            self.message_history.append(response)
+            return response
+
+        # Check if receiver exists for other message types
         if message.receiver not in self.agents:
             raise ValueError(f"Agent '{message.receiver}' not registered")
 
@@ -154,29 +175,8 @@ class MCPBus:
             self.message_history.append(response)
             return response
 
-        elif message.message_type == "tool_call":
-            # Execute a tool
-            tool_name = message.payload.get("tool_name")
-            tool_params = message.payload.get("parameters", {})
-
-            if tool_name not in self.tools:
-                raise ValueError(f"Tool '{tool_name}' not registered")
-
-            result = self.tools[tool_name].execute(**tool_params)
-
-            response = MCPMessage(
-                sender = "MCPBus",
-                receiver = message.sender,
-                message_type = "tool_response",
-                payload = {"result": result}
-            )
-
-            self.message_history.append(response)
-            return response
-
         else:
             raise ValueError(f"Unknown message type: {message.message_type}")
-
     def broadcast(self, sender: str, message_type: str, payload: Any) -> List[MCPMessage]:
         """
         Broadcast a message to all agents.

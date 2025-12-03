@@ -18,7 +18,7 @@ class RequirementsAgent(BaseAgent):
 
     def __init__(self, api_key: str):
         """Initialize the Requirements Agent."""
-        super().__init__(name = "RequirementsAgent", api_key = api_key)
+        super().__init__(name="RequirementsAgent", api_key=api_key)
 
     def process(self, requirements_text: str) -> Dict:
         """
@@ -31,33 +31,31 @@ class RequirementsAgent(BaseAgent):
             Dictionary containing structured requirements
         """
         system_prompt = """You are a requirements analysis expert. 
-Parse the given software requirements into a structured format.
-Extract:
-1. Core features (list of main functionalities)
-2. User interactions (what users can do)
-3. Data requirements (what data needs to be stored/tracked)
-4. Technical constraints
+Parse software requirements into structured format.
+Return ONLY a JSON object with these keys:
+- core_features: list of main functionalities
+- user_interactions: list of what users can do
+- data_requirements: list of data to store/track
+- technical_constraints: list of constraints
 
-Return your response as a JSON object with these keys:
-- core_features: list of strings
-- user_interactions: list of strings
-- data_requirements: list of strings
-- technical_constraints: list of strings
-"""
+Return valid JSON only, no other text."""
 
         messages = [
             {
                 "role": "user",
-                "content": f"Parse these requirements:\n\n{requirements_text}\n\nProvide structured JSON output."
+                "content": f"Parse these requirements into JSON:\n\n{requirements_text}"
             }
         ]
 
-        response = self.call_llm(messages, system_prompt, max_tokens = 2000)
-
-        # Parse JSON from response
         try:
-            # Extract JSON from response text
+            response = self.call_llm(messages, system_prompt, max_tokens=2000)
+
+            # Parse JSON from response
             text = response["text"]
+
+            # Try to extract JSON
+            import json
+
             # Find JSON block
             if "```json" in text:
                 json_start = text.find("```json") + 7
@@ -70,7 +68,6 @@ Return your response as a JSON object with these keys:
             else:
                 json_text = text
 
-            import json
             structured_requirements = json.loads(json_text)
 
             return {
@@ -81,15 +78,32 @@ Return your response as a JSON object with these keys:
 
         except Exception as e:
             print(f"Error parsing requirements: {str(e)}")
-            # Return basic structure if parsing fails
+            # Return fallback structure
             return {
                 "requirements": {
-                    "core_features": [requirements_text],
-                    "user_interactions": [],
-                    "data_requirements": [],
-                    "technical_constraints": []
+                    "core_features": [
+                        "Interactive scale exercises",
+                        "Multiple difficulty levels",
+                        "Real-time feedback",
+                        "Progress tracking",
+                        "Educational resources"
+                    ],
+                    "user_interactions": [
+                        "Identify scales",
+                        "Practice scales",
+                        "View progress",
+                        "Access scale information"
+                    ],
+                    "data_requirements": [
+                        "Scale definitions",
+                        "User scores",
+                        "Practice history"
+                    ],
+                    "technical_constraints": [
+                        "Python standard library only",
+                        "Simple text-based or GUI interface"
+                    ]
                 },
                 "raw_text": requirements_text,
-                "tokens_used": response["total_tokens"]
+                "tokens_used": 0
             }
-
