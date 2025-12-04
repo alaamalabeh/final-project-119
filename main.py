@@ -99,105 +99,10 @@ def run_gui_mode(orchestrator: Orchestrator):
         from gui.requirements_gui import launch_gui
         launch_gui(orchestrator)
     except ImportError as e:
-        print(f"\n⚠ Error importing GUI: {e}")
+        print(f"\n Error importing GUI: {e}")
         print("\nFalling back to CLI mode...")
         run_cli_mode(orchestrator)
 
-"""
-=============================================================================
-DEMO INSTRUCTIONS - How to Run and Test This Project
-=============================================================================
-
-STEP 1: Setup
--------------
-Ensure you have all dependencies installed:
-    pip3.12 install openai pytest python-dotenv
-
-Make sure your .env file contains:
-    OPENAI_API_KEY=your-api-key-here
-
-
-STEP 2: Run the Multi-Agent System (CLI Mode)
-----------------------------------------------
-To see the complete workflow with all agents:
-    python3.12 main.py --cli
-
-This will:
-- Initialize all agents (Requirements, Code Generation, Test Generation)
-- Parse the MST requirements
-- Generate Python code for the Music Scale Trainer
-- Generate test cases
-- Save outputs to generated/ folder
-- Create usage report in reports/model_usage.json
-
-
-STEP 3: Run the Multi-Agent System (GUI Mode)
-----------------------------------------------
-To use the graphical interface:
-    python3.12 main.py
-
-Then click the "🚀 Generate Code & Tests" button
-
-
-STEP 4: View Generated Files
------------------------------
-Check what was generated:
-    ls -la generated/
-    ls -la reports/
-
-View the usage tracking:
-    cat reports/model_usage.json
-
-
-STEP 5: Run the Generated Music Scale Trainer Application
-----------------------------------------------------------
-Launch the generated MST app:
-    python3.12 generated/mst_app.py
-
-Interact with the GUI:
-- Select difficulty level (Easy/Medium/Hard)
-- Click "Start Exercise" or "Identify Scale"
-- Answer scale identification questions
-- Track your progress
-
-
-STEP 6: Run the Generated Tests
---------------------------------
-Execute all test cases:
-    python3.12 run_tests.py
-
-This will:
-- Run 10+ test cases
-- Display pass/fail results
-- Show pass rate percentage (should be 80%+)
-
-
-TROUBLESHOOTING
----------------
-If you get "OPENAI_API_KEY not set" error:
-    export OPENAI_API_KEY='your-api-key-here'
-
-If you get OpenAI quota exceeded:
-- The system will use fallback code (this is intentional)
-- The fallback demonstrates error handling and fault tolerance
-
-If GUI doesn't launch:
-- System will automatically fall back to CLI mode
-- Use: python3.12 main.py --cli
-
-
-
-=============================================================================
-"""
-
-from dotenv import load_dotenv
-load_dotenv()
-
-import os
-import sys
-from orchestrator import Orchestrator
-
-# ... rest of your main.py code ...
 
 if __name__ == "__main__":
     main()
