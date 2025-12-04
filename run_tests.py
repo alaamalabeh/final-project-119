@@ -23,12 +23,12 @@ def run_tests():
 
     # Check if test file exists
     if not os.path.exists(test_file):
-        print(f"\n❌ Error: Test file not found: {test_file}")
+        print(f"\n Error: Test file not found: {test_file}")
         print("Please generate tests first by running: python main.py")
         sys.exit(1)
 
-    print(f"\n📝 Test file: {test_file}")
-    print("\n🧪 Running tests with pytest...\n")
+    print(f"\n Test file: {test_file}")
+    print("\n Running tests with pytest...\n")
 
     # Try running with pytest first
     try:
@@ -57,22 +57,22 @@ def run_tests():
             print("TEST RESULTS SUMMARY")
             print("=" * 70)
             print(f"Total Tests: {total}")
-            print(f"Passed: {passed} ✅")
-            print(f"Failed: {failed} ❌")
+            print(f"Passed: {passed} ")
+            print(f"Failed: {failed} ")
             print(f"Pass Rate: {pass_rate:.1f}%")
 
             if pass_rate >= 80:
-                print("\n🎉 SUCCESS: Pass rate meets 80% requirement!")
+                print("\n SUCCESS: Pass rate meets 80% requirement!")
             else:
-                print(f"\n⚠️  WARNING: Pass rate below 80% requirement")
+                print(f"\n WARNING: Pass rate below 80% requirement")
 
             return result.returncode == 0
         else:
-            print("\n⚠️  Could not parse test results")
+            print("\n Could not parse test results")
             return False
 
     except FileNotFoundError:
-        print("❌ pytest not found. Trying unittest...\n")
+        print(" pytest not found. Trying unittest...\n")
 
         # Fallback to unittest
         try:
@@ -87,14 +87,14 @@ def run_tests():
 
             # Check if tests ran
             if "Ran" in result.stderr:
-                print("\n✅ Tests completed (see output above)")
+                print("\n Tests completed (see output above)")
                 return result.returncode == 0
             else:
-                print("\n⚠️  Tests may not have run properly")
+                print("\n Tests may not have run properly")
                 return False
 
         except Exception as e:
-            print(f"\n❌ Error running tests: {e}")
+            print(f"\n Error running tests: {e}")
             return False
 
 
@@ -105,9 +105,9 @@ def main():
     print("\n" + "=" * 70)
 
     if success:
-        print("✅ All tests completed successfully!")
+        print(" All tests completed successfully!")
     else:
-        print("⚠️  Some tests failed or had errors")
+        print(" Some tests failed or had errors")
 
     print("=" * 70)
 
